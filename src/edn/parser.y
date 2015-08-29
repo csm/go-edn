@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	yyDebug = 4
+	//yyDebug = 4
 }
 
 var result = new(yySymType)

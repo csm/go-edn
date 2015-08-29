@@ -6,7 +6,7 @@ all: prepare test
 prepare: parser lexer
 	@:
 
-lexer: nex
+lexer:
 	./bin/nex < src/edn/lexer.nn > src/edn/lexer.nn.go
 	go fmt src/edn/lexer.nn.go
 
