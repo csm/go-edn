@@ -1,9 +1,17 @@
+//go:generate go get github.com/blynn/nex
+//go:generate ./bin/nex -o lexer.nn.go lexer.nn
+//go:generate go fmt lexer.nn.go
+//go:generate sed -i .tmp s:Lexer:lexer:g lexer.nn.go
+//go:generate sed -i .tmp s:Newlexer:newLexer:g lexer.nn.go
+//go:generate go tool yacc -o parser.y.go parser.y
+//go:generate sed -i .tmp -f fixparser.sed parser.y.go
+
 package edn
 
 import (
 	"errors"
 	"fmt"
-	"edn/types"
+	"github.com/csm/go-edn/types"
 	"io"
 	"strings"
 )
@@ -31,7 +39,7 @@ func ParseReader(reader io.Reader) (val types.Value, err error) {
 	}()
 
 	lexer := newLexer(reader)
-	result = new(yySymType)
+	result := new(yySymType)
 	if yyParse(lexer, result) == 0 {
 		//fmt.Printf("result: v:%T:%+v\n", result.v, result.v)
 		val = result.v

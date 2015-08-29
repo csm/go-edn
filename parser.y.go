@@ -1,25 +1,23 @@
-//line src/edn/parser.y:2
+//line parser.y:2
 package edn
 
 import __yyfmt__ "fmt"
 
-//line src/edn/parser.y:2
+//line parser.y:2
 /*
 If this file is not parser.y, it was generated from parser.y and
 should not be edited directly.
 */
 
 import (
-	"edn/types"
+	"github.com/csm/go-edn/types"
 )
 
 func init() {
 	//yyDebug = 4
 }
 
-var result = new(yySymType)
-
-//line src/edn/parser.y:21
+//line parser.y:19
 type yySymType struct {
 	yys int
 	k   types.Value
@@ -77,7 +75,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyMaxDepth = 200
 
-//line src/edn/parser.y:167
+//line parser.y:165
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -196,7 +194,7 @@ type yyLexer interface {
 }
 
 type yyParser interface {
-	Parse(yyLexer) int
+	Parse(yyLexer, *yySymType) int
 	Lookahead() int
 }
 
@@ -335,10 +333,10 @@ out:
 }
 
 func yyParse(yylex yyLexer, result *yySymType) int {
-	return yyNewParser().Parse(yylex)
+	return yyNewParser().Parse(yylex, result)
 }
 
-func (yyrcvr *yyParserImpl) Parse(yylex yyLexer) int {
+func (yyrcvr *yyParserImpl) Parse(yylex yyLexer, result *yySymType) int {
 	var yyn int
 	var yylval yySymType
 	var yyVAL yySymType
@@ -517,55 +515,55 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line src/edn/parser.y:43
+		//line parser.y:41
 		{
 			result.v = yyDollar[2].v
 		}
 	case 2:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line src/edn/parser.y:44
+		//line parser.y:42
 		{
 			yylex.Error("empty input")
 		}
 	case 4:
 		yyDollar = yyS[yypt-4 : yypt+1]
-		//line src/edn/parser.y:49
+		//line parser.y:47
 		{
 			yyVAL.v = types.TaggedValue{string(yyDollar[2].v.(types.Symbol)), yyDollar[4].v}
 		}
 	case 24:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line src/edn/parser.y:82
+		//line parser.y:80
 		{
 			yyVAL.v = types.Value(new(types.List))
 		}
 	case 25:
 		yyDollar = yyS[yypt-4 : yypt+1]
-		//line src/edn/parser.y:83
+		//line parser.y:81
 		{
 			yyDollar[1].v.(*types.List).Insert(yyDollar[3].v)
 		}
 	case 26:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line src/edn/parser.y:89
+		//line parser.y:87
 		{
 			yyVAL.v = types.Bool(true)
 		}
 	case 27:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line src/edn/parser.y:90
+		//line parser.y:88
 		{
 			yyVAL.v = types.Bool(false)
 		}
 	case 28:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line src/edn/parser.y:94
+		//line parser.y:92
 		{
 			yyVAL.v = types.Value(nil)
 		}
 	case 37:
 		yyDollar = yyS[yypt-4 : yypt+1]
-		//line src/edn/parser.y:131
+		//line parser.y:129
 		{
 			set := types.Sequence(types.Set{})
 			values := types.Sequence(yyDollar[3].v.(*types.List))
@@ -573,44 +571,44 @@ yydefault:
 		}
 	case 38:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line src/edn/parser.y:139
+		//line parser.y:137
 		{
 			yyVAL.k = yyDollar[1].v
 			yyVAL.v = yyDollar[3].v
 		}
 	case 39:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line src/edn/parser.y:140
+		//line parser.y:138
 		{
 			yylex.Error("Map literal must contain an even number of forms")
 		}
 	case 40:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line src/edn/parser.y:144
+		//line parser.y:142
 		{
 			yyVAL.v = types.Map{}
 		}
 	case 41:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line src/edn/parser.y:146
+		//line parser.y:144
 		{
 			yyDollar[1].v.(types.Map)[yyDollar[2].k] = yyDollar[2].v
 		}
 	case 42:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line src/edn/parser.y:152
+		//line parser.y:150
 		{
 			yyVAL = yyDollar[2]
 		}
 	case 43:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line src/edn/parser.y:156
+		//line parser.y:154
 		{
 			yyVAL = yyDollar[2]
 		}
 	case 44:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line src/edn/parser.y:161
+		//line parser.y:159
 		{
 			vec := types.Sequence(types.Vector{})
 			values := types.Sequence(yyDollar[2].v.(*types.List))

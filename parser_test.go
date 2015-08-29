@@ -1,7 +1,7 @@
 package edn
 
 import (
-	. "edn/types"
+	. "github.com/csm/go-edn/types"
 	. "testing"
 	"math/big"
 )

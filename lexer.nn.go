@@ -1,6 +1,6 @@
 package edn
 
-import "edn/types"
+import "github.com/csm/go-edn/types"
 import (
 	"bufio"
 	"io"
@@ -1342,9 +1342,9 @@ func newLexerWithInit(in io.Reader, initFun func(*lexer)) *lexer {
 					return 1
 				}
 				switch {
-				case 97 <= r && r <= 122:
-					return 1
 				case 65 <= r && r <= 90:
+					return 1
+				case 97 <= r && r <= 122:
 					return 1
 				case 48 <= r && r <= 57:
 					return -1

@@ -7,14 +7,12 @@ should not be edited directly.
 */
 
 import (
-	"edn/types"
+	"github.com/csm/go-edn/types"
 )
 
 func init() {
 	//yyDebug = 4
 }
-
-var result = new(yySymType)
 
 %}
 

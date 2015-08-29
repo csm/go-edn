@@ -48,7 +48,7 @@
 
 package edn
 
-import "edn/types"
+import "github.com/csm/go-edn/types"
 
 func init() {
 	/* (this has to be in a func or lex doesn't write it out to final file)
