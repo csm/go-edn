@@ -6,39 +6,63 @@ If this file is not parser.y, it was generated from parser.y and
 should not be edited directly.
 */
 
-import "github.com/bjeanes/go-edn/types"
+import (
+	"edn/types"
+)
 
 func init() {
-	//yyDebug = 4
+	yyDebug = 4
 }
+
+var result = new(yySymType)
+
 %}
 
 %union { 
 	k types.Value
 	v types.Value
+	raw string
 } 
 
 %token tOpenBracket tCloseBracket
 %token tOpenParen tCloseParen
 %token tOpenBrace tCloseBrace
 %token tOctothorpe
-%token tString tKeyword tCharacter
+%token tString tKeyword tCharacter tSymbol
 %token tWhitespace
 %token tNil
+%token tTrue
+%token tFalse
+%token tInteger
+%token tBigInteger
+%token tFloat
+%token tRational
 
 %% 
-input /* somebody help me not have to do this: */
+ input /* somebody help me not have to do this: */
 	: ws✳ value ws✳ { result.v = $2.v }
+	| ws✳ { yylex.Error("empty input") }
 	;
 
 value
+	: untaggedValue
+	| tOctothorpe symbol ws✳ untaggedValue { $$.v = types.TaggedValue{string($2.v.(types.Symbol)), $4.v} }
+	;
+
+untaggedValue
 	: list
 	| vector
 	| string
 	| set
 	| map
 	| keyword
+	| symbol
 	| character
+	| bool
+	| integer
+	| bigint
+	| float
+	| rational
 	| nil
 	;
 
@@ -61,6 +85,11 @@ values
 	  }
 	;
 
+bool
+	: tTrue { $$.v = types.Bool(true) }
+	| tFalse { $$.v = types.Bool(false) }
+	;
+
 nil
 	: tNil { $$.v = types.Value(nil) }
 	;
@@ -69,12 +98,32 @@ character
 	: tCharacter
 	;
 
+integer
+	: tInteger
+	;
+
+bigint
+	: tBigInteger
+	;
+
+float
+	: tFloat
+	;
+
+rational
+	: tRational
+	;
+
 keyword
 	: tKeyword
 	;
 
 string
 	: tString
+	;
+
+symbol
+	: tSymbol
 	;
 
 set
@@ -87,7 +136,7 @@ set
 	;
 
 key_value
-	: value ws✳ value { $$.k = $1.v; $$.v = $3.v }
+	: value ws＋ value { $$.k = $1.v; $$.v = $3.v }
 	| value { yylex.Error("Map literal must contain an even number of forms") }
 	;
 

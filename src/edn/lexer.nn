@@ -7,6 +7,8 @@
 /\)/					{ return tCloseParen	}
 /#/						{ return tOctothorpe	}
 /nil/					{ return tNil }
+/true/                  { lval.v = types.Bool(true); return tTrue }
+/false/                 { lval.v = types.Bool(false); return tFalse }
 /\\newline/				{ lval.v = types.Character('\n'); return tCharacter }
 /\\return/				{ lval.v = types.Character('\r'); return tCharacter }
 /\\tab/					{ lval.v = types.Character('\t'); return tCharacter }
@@ -29,7 +31,15 @@
 							s := yylex.Text()
 							lval.v = types.String(s[1:len(s)-1])
 							return tString
-						}
+					    }
+/[-a-zA-Z.\*\+!_\?\$%&=<>][-a-zA-Z0-9.\*\+!_\?\$%&=<>:#]*/ { lval.v = types.Symbol(yylex.Text()); return tSymbol }
+/[-+]?([0-9]|[1-9][0-9]+)N/ { fmt.Printf("bigint: %s\n", yylex.Text()); lval.v = types.ParseBigInt(yylex.Text()); return tBigInteger }
+/[-+]?([0-9]|[1-9][0-9]+)M/ { fmt.Printf("float (form 3): %s\n", yylex.Text()); lval.v = types.ParseFloat(yylex.Text()); return tFloat }
+/[-+]?([0-9]|[1-9][0-9]+)/  { fmt.Printf("int: %s\n", yylex.Text()); lval.v = types.ParseInt(yylex.Text()); return tInteger }
+/[-+]?([0-9]|[1-9][0-9]+)\.[0-9]+[eE][-+]?[0-9]+/ { fmt.Printf("float (form 0): %s\n", yylex.Text()); lval.v = types.ParseFloat(yylex.Text()); return tFloat }
+/[-+]?([0-9]|[1-9][0-9]+)\.[0-9]+/ { fmt.Printf("float (form 1): %s\n", yylex.Text()); lval.v = types.ParseFloat(yylex.Text()); return tFloat }
+/[-+]?([0-9]|[1-9][0-9]*)[eE][-+]?[0-9]+/ { fmt.Printf("float (form 2): %s\n", yylex.Text()); lval.v = types.ParseFloat(yylex.Text()); return tFloat }
+/[-+]?[0-9]+\/[0-9]+/  { fmt.Printf("rational: %s\n", yylex.Text()); lval.v = types.ParseRational(yylex.Text()); return tRational }
 /./						{   // (This rule must be last)
 							// Unmatched token...
 							return -1 
@@ -38,7 +48,8 @@
 
 package edn
 
-import "github.com/bjeanes/go-edn/types"
+import "edn/types"
+import "fmt"
 
 func init() {
 	/* (this has to be in a func or lex doesn't write it out to final file)

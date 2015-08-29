@@ -1,6 +1,9 @@
 package types
 
-import . "testing"
+import (
+	. "testing"
+	"fmt"
+)
 
 func assertEqual(expect, actual interface{}, t *T) {
 	if expect != actual {
@@ -60,4 +63,21 @@ func TestSetString(t *T) {
 	//       Look into https://code.google.com/p/gohash/
 	//
 	// set.Insert(Vector{Int(1), Int(2), Map{String("foo"): Int(17)}})
+}
+
+func assertValueEqual(v1, v2 Value, t *T) {
+	if !v1.Equals(v2) {
+		t.Errorf("Expecting %+v, got %+v", v1, v2)
+	}
+}
+
+func assertValueNotEqual(v1, v2 Value, t*T) {
+	if v1.Equals(v2) {
+		t.Errorf("expecting %+v not equal to %+v", v1, v2)
+	}
+}
+
+func TestStrings(t *T) {
+	assertValueEqual(String("foobar"), String(fmt.Sprint("foo", "bar")), t)
+	assertValueNotEqual(String("foo"), Keyword("foo"), t)
 }

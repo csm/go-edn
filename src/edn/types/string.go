@@ -9,7 +9,10 @@ type String string
 
 // Equals compares the String to another Value for equality.
 func (this String) Equals(other Value) bool {
-	return this == other
+	switch o := other.(type) {
+	case String: return string(this) == string(o)
+	default: return false
+	}
 }
 
 // String returns the EDN string representation of the String.
@@ -22,11 +25,10 @@ type Keyword string
 
 // Equals compares the Keyword to another Value for equality.
 func (this Keyword) Equals(other Value) bool {
-	// NOTE: this will allow a Keyword to == a String.
-	// TODO: Make Keyword a struct (namespace + word) that
-	//       is a distinct type.
-
-	return this == other
+	switch o := other.(type) {
+	case Keyword: return string(this) == string(o)
+	default: return false
+	}
 }
 
 // String returns the EDN string representation of the Keyword.
@@ -56,4 +58,17 @@ func (this Character) String() string {
 		str = string(this)
 	}
 	return fmt.Sprintf("\\%s", str)
+}
+
+type Symbol string
+
+func (this Symbol) Equals(other Value) bool {
+	switch o := other.(type) {
+	case Symbol: return string(this) == string(o)
+	default: return false
+	}
+}
+
+func (this Symbol) String() string {
+	return string(this)
 }

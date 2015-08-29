@@ -3,7 +3,7 @@ package edn
 import (
 	"errors"
 	"fmt"
-	"github.com/bjeanes/go-edn/types"
+	"edn/types"
 	"io"
 	"strings"
 )
@@ -31,8 +31,9 @@ func ParseReader(reader io.Reader) (val types.Value, err error) {
 	}()
 
 	lexer := newLexer(reader)
-	result := new(yySymType)
+	result = new(yySymType)
 	if yyParse(lexer, result) == 0 {
+		//fmt.Printf("result: v:%T:%+v\n", result.v, result.v)
 		val = result.v
 	} else {
 		err = errors.New("Error: could not parse provided EDN")

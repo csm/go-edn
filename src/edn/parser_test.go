@@ -1,8 +1,9 @@
 package edn
 
 import (
-	. "github.com/bjeanes/go-edn/types"
+	. "edn/types"
 	. "testing"
+	"math/big"
 )
 
 func parse(s string, t *T) (val Value) {
@@ -67,7 +68,7 @@ func TestParseVector(t *T) {
 func TestParseMap(t *T) {
 	_, err := ParseString("{:x}")
 
-	if err.Error() != "Error: Map literal must contain an even number of forms" {
+	if err == nil || err.Error() != "Error: Map literal must contain an even number of forms" {
 		t.Error("Expected parsing map with single item to fail")
 	}
 
@@ -123,6 +124,12 @@ func TestParse(t *T) {
 		Value(nil),
 		Map{String("key"): String("value")},
 		Map{
+			Keyword("int"): Int(31337),
+			Keyword("float"): Float(2.718),
+			Keyword("bigint"): (*BigInt)(big.NewInt(33333)),
+			Keyword("rational"): (*Rational)(big.NewRat(123, 456)),
+		},
+		Map{
 			String("key"):   String("value"),
 			Keyword("key2"): new(List).Insert(Keyword("value")),
 		},
@@ -135,10 +142,37 @@ func TestParse(t *T) {
 		(),[]()""[\x \newline]
 		{}#{"set"} nil
 		{"key" "value"}
+		{:int 31337 :float 2.718 :bigint 33333N :rational 123/456 }
 		{"key" "value" :key2 (:value)}
 		:key
 	)
 	`, t)
 
 	assertValueEqual(actual, expected, t)
+}
+
+func TestParseInt(t *T) {
+	assertValueEqual(parse("0", t), Int(0), t)
+	assertValueEqual(parse("1234", t), Int(1234), t)
+}
+
+func TestParseBigInt(t *T) {
+	assertValueEqual(parse("31337N", t), (*BigInt)(big.NewInt(31337)), t)
+}
+
+func TestParseFloat(t *T) {
+	assertValueEqual(parse("1234M", t), Float(1234.0), t)
+	assertValueEqual(parse("3.141", t), Float(3.141), t)
+}
+
+func TestParseRational(t *T) {
+	assertValueEqual(parse("3/4", t), (*Rational)(big.NewRat(3, 4)), t)
+}
+
+func TestParseSymbol(t *T) {
+	assertValueEqual(parse("a-symbol", t), Symbol("a-symbol"), t)
+}
+
+func TestTaggedValue(t *T) {
+	assertValueEqual(parse("#tagged \"value\"", t), TaggedValue{"tagged", String("value")}, t)
 }
