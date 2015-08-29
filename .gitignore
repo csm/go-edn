@@ -3,3 +3,4 @@ go-edn.iml
 .idea
 bin
 src/github.com
+*.tmp
