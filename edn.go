@@ -1,4 +1,5 @@
 //go:generate go get github.com/blynn/nex
+//go:generate go install github.com/blynn/nex
 //go:generate ./bin/nex -o lexer.nn.go lexer.nn
 //go:generate go fmt lexer.nn.go
 //go:generate sed -i .tmp s:Lexer:lexer:g lexer.nn.go
