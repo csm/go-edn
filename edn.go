@@ -1,6 +1,6 @@
 //go:generate go get github.com/blynn/nex
 //go:generate go install github.com/blynn/nex
-//go:generate go run src/github.com/blynn/nex/nex.go -o lexer.nn.go lexer.nn
+//go:generate go run $GOPATH/src/github.com/blynn/nex/nex.go -o lexer.nn.go lexer.nn
 //go:generate go fmt lexer.nn.go
 //go:generate sed -i .tmp s:Lexer:lexer:g lexer.nn.go
 //go:generate sed -i .tmp s:Newlexer:newLexer:g lexer.nn.go
