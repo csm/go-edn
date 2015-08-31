@@ -176,3 +176,8 @@ func TestParseSymbol(t *T) {
 func TestTaggedValue(t *T) {
 	assertValueEqual(parse("#tagged \"value\"", t), TaggedValue{"tagged", String("value")}, t)
 }
+
+func TestParseKeyword(t *T) {
+	assertValueEqual(parse(":keyword", t), Keyword("keyword"), t)
+	assertValueEqual(parse(":key/word:123", t), Keyword("key/word:123"), t)
+}
