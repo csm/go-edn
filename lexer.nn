@@ -1,37 +1,37 @@
-/[\r\n\t, ]+/			{ return tWhitespace	}
-/\[/					{ return tOpenBracket	}
-/\]/					{ return tCloseBracket	}
-/{/						{ return tOpenBrace		}
-/}/						{ return tCloseBrace	}
-/\(/					{ return tOpenParen 	}
-/\)/					{ return tCloseParen	}
-/#/						{ return tOctothorpe	}
-/nil/					{ return tNil }
+/[\r\n\t, ]+/                   { return tWhitespace    }
+/\[/                                    { return tOpenBracket   }
+/\]/                                    { return tCloseBracket  }
+/{/                                             { return tOpenBrace             }
+/}/                                             { return tCloseBrace    }
+/\(/                                    { return tOpenParen     }
+/\)/                                    { return tCloseParen    }
+/#/                                             { return tOctothorpe    }
+/nil/                                   { return tNil }
 /true/                  { lval.v = types.Bool(true); return tTrue }
 /false/                 { lval.v = types.Bool(false); return tFalse }
-/\\newline/				{ lval.v = types.Character('\n'); return tCharacter }
-/\\return/				{ lval.v = types.Character('\r'); return tCharacter }
-/\\tab/					{ lval.v = types.Character('\t'); return tCharacter }
-/\\space/				{ lval.v = types.Character(' ');  return tCharacter }
+/\\newline/                             { lval.v = types.Character('\n'); return tCharacter }
+/\\return/                              { lval.v = types.Character('\r'); return tCharacter }
+/\\tab/                                 { lval.v = types.Character('\t'); return tCharacter }
+/\\space/                               { lval.v = types.Character(' ');  return tCharacter }
 /\\u[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/
-						{
-							panic("Unicode characters are currently unimplemented")
-						}
-/\\[!-~]/				{
-							s := yylex.Text()[1:]
-							ch, _, _ := strings.NewReader(s).ReadRune()
-							lval.v = types.Character(ch)
-							return tCharacter
-						}
-/:[a-zA-Z][a-zA-Z0-9]*/ {
-							lval.v = types.Keyword(yylex.Text()[1:])
-							return tKeyword
-						}
-/"(\\.|[^"\\])*"/   	{
-							s := yylex.Text()
-							lval.v = types.String(s[1:len(s)-1])
-							return tString
-					    }
+                                                {
+                                                        panic("Unicode characters are currently unimplemented")
+                                                }
+/\\[!-~]/                                       {
+                                                        s := yylex.Text()[1:]
+                                                        ch, _, _ := strings.NewReader(s).ReadRune()
+                                                        lval.v = types.Character(ch)
+                                                        return tCharacter
+                                                }
+/:[-a-zA-Z0-9\.\*\+!_\?\$%&=<>#][-a-zA-Z0-9\.\*\+!_\?\$%&=<>:\/#]*/                     {
+                                                        lval.v = types.Keyword(yylex.Text()[1:])
+                                                        return tKeyword
+                                                }
+/"(\\.|[^"\\])*"/                               {
+                                                        s := yylex.Text()
+                                                        lval.v = types.String(s[1:len(s)-1])
+                                                        return tString
+                                                }
 /[-a-zA-Z.\*\+!_\?\$%&=<>][-a-zA-Z0-9.\*\+!_\?\$%&=<>:#]*/ { lval.v = types.Symbol(yylex.Text()); return tSymbol }
 /[-+]?([0-9]|[1-9][0-9]+)N/ { lval.v = types.ParseBigInt(yylex.Text()); return tBigInteger }
 /[-+]?([0-9]|[1-9][0-9]+)M/ { lval.v = types.ParseFloat(yylex.Text()); return tFloat }
@@ -40,10 +40,10 @@
 /[-+]?([0-9]|[1-9][0-9]+)\.[0-9]+/ { lval.v = types.ParseFloat(yylex.Text()); return tFloat }
 /[-+]?([0-9]|[1-9][0-9]*)[eE][-+]?[0-9]+/ { lval.v = types.ParseFloat(yylex.Text()); return tFloat }
 /[-+]?[0-9]+\/[0-9]+/  { lval.v = types.ParseRational(yylex.Text()); return tRational }
-/./						{   // (This rule must be last)
-							// Unmatched token...
-							return -1 
-						}
+/./                                             {   // (This rule must be last)
+                                                        // Unmatched token...
+                                                        return -1 
+                                                }
 //
 
 package edn
@@ -51,10 +51,10 @@ package edn
 import "github.com/csm/go-edn/types"
 
 func init() {
-	/* (this has to be in a func or lex doesn't write it out to final file)
-	 *
-	 * If this file is not lexer.nn, it was generated from lexer.nn and
-	 * should not be edited directly.
-	 *
-	 */
+        /* (this has to be in a func or lex doesn't write it out to final file)
+         *
+         * If this file is not lexer.nn, it was generated from lexer.nn and
+         * should not be edited directly.
+         *
+         */
 }
