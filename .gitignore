@@ -4,3 +4,5 @@ go-edn.iml
 bin
 src/github.com
 *.tmp
+lexer.nn.go
+parser.y.go

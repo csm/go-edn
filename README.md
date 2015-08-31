@@ -4,24 +4,17 @@ An [EDN][edn] parser for Go.
 
 ## Building
 
-**Note:** Development on this library is done against Go 1.1. In particular,
-Go 1.0's YACC differs from Go 1.1's YACC with regards to how `fmt` is imported.
-
-The lexer is generated with [nex][nex]
-and the parser is generated with [Go's YACC tool][yacc].
-
-In order to be compatible with `go get`<sup>\[[1][irc discussion]\]</sup>,
-which does not support a precompilation step<sup>\[[2][go build advice]\]</sup>
-the generated files are committed alongside the source files.
-
-The lexer and parser are re-created every time the project is made, which you
-can simply do with:
+tl;dr:
 
 ```
-make
+go get github.com/csm/go-edn
+go generate github.com/csm/go-edn
 ```
 
-This will also run the tests.
+The first command will fetch the sources, but fail to build; the second command
+will generate the lexer (with [nex][nex]) and parser (with [yacc][yacc]).
+
+Tested with go 1.5; 1.4 may work too.
 
 ## License
 
