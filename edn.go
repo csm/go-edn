@@ -1,6 +1,6 @@
 //go:generate go get github.com/blynn/nex
 //go:generate go install github.com/blynn/nex
-//go:generate go run $GOPATH/src/github.com/blynn/nex/nex.go -o lexer.nn.go lexer.nn
+//go:generate go run $GOPATH/src/github.com/blynn/nex/main.go $GOPATH/src/github.com/blynn/nex/nex.go -o lexer.nn.go lexer.nn
 //go:generate go fmt lexer.nn.go
 //go:generate sed -i~ s:Lexer:lexer:g lexer.nn.go
 //go:generate sed -i~ s:Newlexer:newLexer:g lexer.nn.go
@@ -26,7 +26,7 @@ func ParseString(string string) (val types.Value, err error) {
 
 // ParseReader parses EDN from an io.Reader.
 //
-// Data is returned as a Value in the first return value. 
+// Data is returned as a Value in the first return value.
 // The second return value is nil on successful parses, and
 // an error on unsuccessful parses (e.g. syntax error).
 func ParseReader(reader io.Reader) (val types.Value, err error) {
@@ -51,7 +51,7 @@ func ParseReader(reader io.Reader) (val types.Value, err error) {
 	return
 }
 
-// DumpString accepts any EDN value and will return the EDN string 
+// DumpString accepts any EDN value and will return the EDN string
 // representation.
 func DumpString(value types.Value) string {
 	return value.String()
